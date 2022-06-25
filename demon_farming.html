@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demon Farming</title>
+</head>
+<body>
+    <table border="1">
+        <thead>
+            <tr id="theadTr">
+                <th>Pit Lords</th>
+                <th>Demons</th>
+            </tr>
+        </thead>
+        <tbody id="tbody" style="background: #312110; color: white;">
+        </tbody>
+    </table>
+    <script>
+        const monsters = {
+            'pitLord': {'hp': 50},
+            'demon': {'hp': 35},
+            'slave': {
+                'imp': {'name': 'Imps', 'hp': 4, 'color': '#EAD437'},
+                'hellHound': {'name': 'Hell Hounds', 'hp': 25, 'color': '#c7c7c7'}
+            }
+        };
+
+        const tbody = document.querySelector('#tbody');
+        const theadTr = document.querySelector('#theadTr');
+
+        Object.entries(monsters.slave).forEach(([id, monster]) => {
+            const th = document.createElement('th');
+            th.innerHTML = monster.name;
+            theadTr.appendChild(th);
+        });
+
+        for (let demonNumber = 1; demonNumber <= 100; demonNumber++) {
+            const tr = document.createElement('tr');
+
+            const demonStackHp = monsters.demon.hp * demonNumber;
+            const minPitLordNumberToRevDemonNumber = Math.ceil(demonStackHp / monsters.pitLord.hp);
+
+            const pitLordTd = document.createElement('td');
+            pitLordTd.innerHTML = `<b>${minPitLordNumberToRevDemonNumber}</b> (${minPitLordNumberToRevDemonNumber * monsters.pitLord.hp})`;
+            tr.appendChild(pitLordTd);
+
+            const demonTd = document.createElement('td');
+            demonTd.innerHTML = `<b>${demonNumber}</b> (${demonStackHp})`;
+            tr.appendChild(demonTd);
+
+            Object.entries(monsters.slave).forEach(([id, slave]) => {
+                const minSlaveNumberToRevDemonNumber = Math.ceil(demonStackHp / slave.hp);
+
+                const slaveTd = document.createElement('td');
+                slaveTd.innerHTML = `<b style="color: ${slave.color}">${minSlaveNumberToRevDemonNumber}</b> (${minSlaveNumberToRevDemonNumber * slave.hp})`;
+
+                tr.appendChild(slaveTd);
+            });
+
+            tbody.appendChild(tr);
+        }
+    </script>
+</body>
+</html>
